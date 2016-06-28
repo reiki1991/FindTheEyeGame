@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>巴巴爸爸</title>
+    <meta name="description" content="粉色巴巴爸爸" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="author" content="Reiki" />
+    <!--<link rel="stylesheet" href="./css/public.css">-->
+</head>
+<body>
+<div class="fm_box">
+    <div class="fm fm_loading"><span>222</span></div><!--预加载层-->
+    <div class="fm fm_mask1"></div><!--游戏规则遮罩层-->
+    <div class="fm fm_mask2"></div><!--加分遮罩层-->
+    <div class="fm fm1 state1" data-state="state1"></div><!--初始化眨眼-->
+    <!--Just having fun-->
+    <div class="fm fm2">
+        <img class="fm2_txt1 animated fadeIn delay1" src="./imgs/fm2_txt1.png" alt="粉色巴巴爸爸">
+        <img class="fm2_txt2 animated fadeIn delay2" src="./imgs/fm2_txt2.png" alt="粉色巴巴爸爸">
+        <img class="fm2_txt3 animated fadeIn delay3" src="./imgs/fm2_txt3.png" alt="粉色巴巴爸爸">
+        <img class="fm2_btn1 animated fadeInUp delay4" src="./imgs/fm2_btn1.png" alt="粉色巴巴爸爸">
+    </div>
+    <!--游戏主界面-->
+    <div class="fm fm3">
+        <div class="fm3_stopwatch abs">10'</div>
+        <div class="fm3_score abs">0</div>
+        <div class="fm3_box rel">
+            <img class="fm3_bg" src="./imgs/fm3_bg.jpg" alt="粉色巴巴爸爸">
+            <img class="fm3_active1 fm3_active abs" src="./imgs/fm3_active1_1.png" data-open="./imgs/fm3_active1_2.png" alt="粉色巴巴爸爸">
+            <img class="fm3_active2 fm3_active abs" src="./imgs/fm3_active2_1.png" data-open="./imgs/fm3_active2_2.png" alt="粉色巴巴爸爸">
+            <div class="fm3_active3 fm3_active abs state1" data-state="state1"></div>
+            <img class="fm3_active4 fm3_active abs" src="./imgs/fm3_active4_1.png" data-open="./imgs/fm3_active4_2.png" alt="粉色巴巴爸爸">
+            <div class="fm3_active5 fm3_active abs state1" data-state="state1"></div>
+        </div>
+    </div>
+    <!--得分通过：congratulations抽大奖-->
+    <div class="fm fm_result1">
+        <div class="fm_baba abs state1" data-state="state1"></div>
+        <img class="fm_result1_tit1 abs animated fadeInUp" src="./imgs/fm_result1_tit1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result1_btn1 abs animated fadeIn delay1" src="./imgs/fm_result1_btn1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result_star1 fm_result_star abs animated infinite delay1" src="./imgs/fm_result_star1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result_star2 fm_result_star abs animated infinite" src="./imgs/fm_result_star2.png" alt="粉色巴巴爸爸">
+        <img class="fm_result_star3 fm_result_star abs animated infinite delay2" src="./imgs/fm_result_star3.png" alt="粉色巴巴爸爸">
+    </div>
+    <!--得分未通过：再找一次-->
+    <div class="fm fm_result2">
+        <div class="fm_baba abs state1" data-state="state1"></div>
+        <img class="fm_result2_tit1 abs animated fadeInUp" src="./imgs/fm_result2_tit1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result2_btn1 abs animated fadeIn delay1" src="./imgs/fm_result2_btn1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result_star1 fm_result_star abs animated infinite delay1" src="./imgs/fm_result_star1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result_star2 fm_result_star abs animated infinite" src="./imgs/fm_result_star2.png" alt="粉色巴巴爸爸">
+        <img class="fm_result_star3 fm_result_star abs animated infinite delay2" src="./imgs/fm_result_star3.png" alt="粉色巴巴爸爸">
+        <img class="fm_result_star4 fm_result_star abs animated infinite delay3" src="./imgs/fm_result_star4.png" alt="粉色巴巴爸爸">
+    </div>
+    <!--填写抽奖信息-->
+    <div class="fm fm_result3">
+        <div class="fm_baba abs state1" data-state="state1"></div>
+        <img class="fm_result3_tit1 abs animated fadeIn" src="./imgs/fm_result3_tit1.png" alt="粉色巴巴爸爸">
+        <form class="fm_result3_data">
+            <input type="text" class="fm_result3_input1 animated fadeIn" maxlength="6" value="">
+            <input type="text" class="fm_result3_input2 animated fadeIn" maxlength="11" value="">
+        </form>
+        <img class="fm_result3_btn1 abs animated fadeInUp delay1" src="./imgs/fm_result3_btn1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result3_star1 fm_result_star abs animated infinite" src="./imgs/fm_result3_star1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result3_star2 fm_result_star abs animated infinite delay1" src="./imgs/fm_result3_star2.png" alt="粉色巴巴爸爸">
+        <img class="fm_result3_star3 fm_result_star abs animated infinite delay2" src="./imgs/fm_result3_star3.png" alt="粉色巴巴爸爸">
+    </div>
+    <!--抽中奖品【fm_award1:现金券，fm_award2:手机壳】-->
+    <div class="fm fm_award">
+        <div class="fm_award_tit fm_inmid"></div>
+        <div class="fm_award_con fm_inmid"><div class="fm_award_img"></div></div>
+        <img class="fm_award_txt1 abs" src="./imgs/fm_award_txt1.png" alt="粉色巴巴兔兔">
+        <img class="fm_result3_star1 fm_result_star abs animated infinite" src="./imgs/fm_result3_star1.png" alt="粉色巴巴爸爸">
+        <img class="fm_result3_star2 fm_result_star abs animated infinite delay1" src="./imgs/fm_result3_star2.png" alt="粉色巴巴爸爸">
+        <img class="fm_result3_star3 fm_result_star abs animated infinite delay2" src="./imgs/fm_result3_star3.png" alt="粉色巴巴爸爸">
+    </div>
+    <!--未抽中奖品-->
+    <div class="fm fm_noaward">
+        <div class="fm_baba abs state1" data-state="state1"></div>
+        <img class="fm_award_tit3 abs" src="./imgs/fm_award_tit3.png" alt="粉色巴巴兔兔">
+        <img class="fm_award_img1 abs" src="./imgs/fm_award_img1.png" alt="粉色巴巴兔兔">
+        <img class="fm_award_btn1 abs" src="./imgs/fm_award_btn1.png" alt="粉色巴巴兔兔">
+        <img class="fm_award_txt1 abs" src="./imgs/fm_award_txt1.png" alt="粉色巴巴兔兔">
+    </div>
+</div>
+<!--<div class="tip_box tip_default tip111" id="test">倾斜检测</div>-->
+<div class="prohibit_rotate"></div>
+<script src="./js/preloadjs.min.js"></script>
+<!--<script src="js/zepto.min.js"></script>
+<script src="js/app.js"></script>-->
+</body>
+</html>
