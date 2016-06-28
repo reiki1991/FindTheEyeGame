@@ -10,8 +10,9 @@ var webpackConfigs = {
   entry: { app: 'js/app.js' }, //打包后整合出来的js文件
   output: {
     path: path.join(__dirname, 'dist'),
+    publicPath: 'http://192.168.0.106:8888/', //生成后图片&js的前缀路径
     filename: 'js/[name].[hash].js', //整合后的js命名规则
-		chunkFilename: 'js/[chunkhash].js'
+    chunkFilename: 'js/[chunkhash].js'
   },
   resolve: {
     root: [
@@ -69,7 +70,7 @@ var webpackConfigs = {
         loader: 'file-loader?name=fonts/[name].[ext]'
       }, { // 转换 8k 以下的图片为 base64,减少请求
         test: /\.(png|jpe?g|gif)$/,
-        loader: 'url-loader?limit=8192&name=./imgs/[name].[ext]!img?minimize'
+        loader: 'url-loader?limit=8192&name=imgs/[name].[ext]!img?minimize'
         // loader: 'url-loader?limit=8192&name=./images/[name]-[hash].[ext]!img?minimize'
       },{
         test: /\.js$/, // 匹配所有js文件，转换成es5语法

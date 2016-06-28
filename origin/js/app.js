@@ -10,6 +10,7 @@ import Preload from "js/preload.js"
 var log = function (m) { (document.ontouchstart!==null) ?  (alert(m)) : (console.log(m)); }
 var App = {
     init: function () { //初始化
+        //App.fm_enter(".fm_award"); App.lottery_result(); return;
         App.fm_enter(".fm1");
         setTimeout(function () {
             $(".fm1").fadeOut(1000);
@@ -30,16 +31,18 @@ var App = {
         var speed = 0, translateX, originDir = 0, nowDir, moveDir;
         if(window.DeviceOrientationEvent) {
             App.tiltEvent = function(e) {
-                /*var tiltLR = e.gamma; //向左倾斜：tiltLR为负数，无倾斜：tiltLR为0，向右倾斜：tiltLR为正数
+                /*//左右倾斜使背景图移动
+                 var tiltLR = e.gamma; //向左倾斜：tiltLR为负数，无倾斜：tiltLR为0，向右倾斜：tiltLR为正数
                  (tiltLR < -15) ? (speed = 0.25) : ((tiltLR < -1) && (speed = 0.12));
                  (tiltLR > -1) && (tiltLR < 1) && (speed = 0);
                  (tiltLR > 15) ? (speed = -0.25) : ((tiltLR > 1) && (speed = -0.12));
                  translateX += speed;
                  (translateX<0) && (translateX = 0);
                  (translateX>70) && (translateX = 70);
-                 /!*$("#test").html(speed+"__"+translateX+"__"+tiltLR);*!/
+                 $("#test").html(speed+"__"+translateX+"__"+tiltLR);
                  $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});*/
 
+                //左右旋转使背景图移动
                 nowDir = e.alpha; //360°旋转
                 moveDir = nowDir - originDir;
                 (nowDir>(360/2)) ? (moveDir = 360 - nowDir) : (moveDir = -nowDir);
@@ -102,16 +105,24 @@ var App = {
          _fm == ".fm_noaward" && App.blink(".fm_baba", 2);*/
     },
     gameover: function(){ //游戏结束
-        log("over");
         var _score = $(".fm3_score").html()-0;
         App.fm_enter((_score > 2) ? ".fm_result1" : ".fm_result2");
         window.removeEventListener('deviceorientation', App.tiltEvent);
     },
     lottery_result: function () {
-        //TODO ajax后台获取用户中奖结果
-        // 进入中奖结果页面【fm_award1:现金券，fm_award2:手机壳，】
-        $(".fm_award").addClass("fm_award1");
-        App.fm_enter(".fm_award");
+        //TODO ajax后台获取用户中奖结果,根据结果进入相关结果页面
+        var award_data = "fm_award1",
+            _ercode = "./imgs/fm_ercode222.png";
+        if(award_data=="fm_award1"){ //fm_award1:现金券[后台获取二维码图]
+            $(".fm_ercode").css("backgroundImage","url("+_ercode+")");
+            $(".fm_award").addClass("fm_award1");
+            App.fm_enter(".fm_award");
+        }else if(award_data=="fm_award2"){ //fm_award2:手机壳
+            $(".fm_award").addClass("fm_award2");
+            App.fm_enter(".fm_award");
+        }else{
+            App.fm_enter(".fm_noaward");
+        }
         /*//未中奖页面
          App.fm_enter(".fm_noaward");*/
     }
