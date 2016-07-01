@@ -6,18 +6,18 @@ import "imgs/fm3_active1_2.png"
 import "imgs/fm3_active2_2.png"
 import "imgs/fm3_active4_2.png"
 import Preload from "js/preload.js"
+import Http from "js/http.js"
 //public
-var log = function (m) { (document.ontouchstart!==null) ?  (alert(m)) : (console.log(m)); }
 var App = {
+    loginUrl: "http://2016spr.disney.e2capp.com/wxapi.php",
     init: function () { //初始化
-        //App.fm_enter(".fm_award"); App.lottery_result(); return;
         App.fm_enter(".fm1");
         setTimeout(function () {
             $(".fm1").fadeOut(1000);
             setTimeout(function () {
                 App.fm_enter(".fm2");
             },1000)
-        },2200)
+        },2200);
     },
     tip: function(_info,_style,_hideTime){ //_style的值有'tip_red'、'tip_green',默认值为'tip_default'
         var randomClass = "tip"+Math.round(Math.random()*1000000000);
@@ -98,11 +98,9 @@ var App = {
         }
         //频道fm_result
         (_fm.indexOf("fm_result") > 0) && setTimeout(function (){
-            App.blink(".fm_baba", 2, null, 500); //执行眨眼操作
+            //App.blink(".fm_baba", 2, null, 500); //执行眨眼操作
             $(_fm).find(".fm_result_star").addClass("fadeOut"); //星星闪烁操作
         },1200);
-        /*//频道fm_noaward
-         _fm == ".fm_noaward" && App.blink(".fm_baba", 2);*/
     },
     gameover: function(){ //游戏结束
         var _score = $(".fm3_score").html()-0;
@@ -110,31 +108,49 @@ var App = {
         window.removeEventListener('deviceorientation', App.tiltEvent);
     },
     lottery_result: function () {
-        //TODO ajax后台获取用户中奖结果,根据结果进入相关结果页面
-        var award_data = "fm_award1",
-            _ercode = "./imgs/fm_ercode222.png";
-        if(award_data=="fm_award1"){ //fm_award1:现金券[后台获取二维码图]
-            $(".fm_ercode").css("backgroundImage","url("+_ercode+")");
-            $(".fm_award").addClass("fm_award1");
-            App.fm_enter(".fm_award");
-        }else if(award_data=="fm_award2"){ //fm_award2:手机壳
-            $(".fm_award").addClass("fm_award2");
-            App.fm_enter(".fm_award");
-        }else{
-            App.fm_enter(".fm_noaward");
-        }
-        /*//未中奖页面
-         App.fm_enter(".fm_noaward");*/
+        Http.goprize(function (_data) { //获取抽奖结果
+            var _state = _data && _data.state;
+            if(_state=="-100"){ //未登录
+                window.location.href = App.loginUrl;
+            }else if(_state=="-1"){
+                App.tip("抱歉，您的抽奖机会已经用完了~");
+            }else{
+                if(_state=="1"){ //fm_award1:现金券
+                    var _ercode = "./imgs/fm_award1.jpg";
+                    //TODO 后台获取二维码图赋值给_ercode
+                    $("#fm_award").attr("src",_ercode);
+                    $(".fm_award").addClass("fm_award1");
+                    App.fm_enter(".fm_award");
+                }else if(_state=="2"){ //fm_award2:手机壳
+                    $(".fm_award").addClass("fm_award2");
+                    App.fm_enter(".fm_award");
+                }else if(_state=="0"){ //未中奖
+                    App.fm_enter(".fm_noaward");
+                }else{
+                    App.tip("网络错误");
+                }
+            }
+        });
     }
 }
 $(document).ready(function () {
+    window.isDebugger = false;
+    window.log = function (m) { (document.ontouchstart!==null) ?  (isDebugger &&　alert(m)) : (console.log(m)); }
     var body_w, body_h;
     var _triggerEvent = (document.ontouchstart!==null) ?  'click' : 'touchstart';
     var scale_fm3_bg = 2551/1206;
     var templ_fm3 = $(".fm3").html();
     var is_mark = false; //是否登记过信息
-    //TODO ajax后台检测是否提交过信息，若登陆过更改is_mark的值为true
-    Preload.init(App.init); //init事件
+    Http.checkLogin(function (_data) { //检测是否登陆[-1为未登录，1为登陆]
+        if(_data=="1"){ //已登陆
+            Preload.init(App.init); //init事件
+            Http.getuserinfo(function (_data) { //获取登陆用户自己的用户资料
+                _data && _data.Tel && (is_mark = true);
+            });
+        }else if(_data=="-1"){ //未登录
+            window.location.href = App.loginUrl;
+        }
+    });
     //fm3_active点击事件【眼睛被点击】
     $("body").on(_triggerEvent,".fm3_active",function (e) {
         (e.target.nodeName=="IMG") ? $(this).attr("src",$(this).data("open")).removeClass("fm3_active") : $(this).remove(); //替换打开图片或移除眼睛
@@ -169,11 +185,18 @@ $(document).ready(function () {
     var phone_regex = new RegExp("1[0-9]{10}");
     $("body").on(_triggerEvent,".fm_result3_btn1",function () {
         var _name = $(".fm_result3_input1").val(), _phone = $(".fm_result3_input2").val();
-        function _passFun() {
-            //TODO ajax后台用户信息提交
-            App.lottery_result();
+        function _passFun(_name,_phone) {
+            Http.updateinfo(_name,_phone, function (_data) { //提交用户信息
+                if(_data=="1"){ //提交成功
+                    App.lottery_result();
+                }else if(_data=="-1"){ //未登录
+                    window.location.href = App.loginUrl;
+                }else if(_data=="-2"){
+                    App.tip("请将信息填写完整");
+                }
+            })
         }
-        (!_name || !_phone) ? App.tip("请将信息填写完整") : ( !phone_regex.test(_phone) ? App.tip("请填写正确的手机号") : _passFun() );
+        (!_name || !_phone) ? App.tip("请将信息填写完整") : ( !phone_regex.test(_phone) ? App.tip("请填写正确的手机号") : _passFun(_name,_phone) );
     });
     //fm_award_btn1点击事件【Replay】
     $("body").on(_triggerEvent,".fm_award_btn1",function () {

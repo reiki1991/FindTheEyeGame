@@ -4,13 +4,20 @@
 import createjs from "js/preloadjs.min.js"
 var Preload = {
     manifest: [ //定义相关JSON格式文件列表
-        { src: "./imgs/fm_award_bg1.png" },
-        { src: "./imgs/fm_award_btn1.png" },
-        { src: "./imgs/fm_award_img1.jpg" },
-        { src: "./imgs/fm_award_tit1.png" },
-        { src: "./imgs/fm_baba1.png" },
-        { src: "./imgs/fm_baba2.png" },
         { src: "./imgs/fm_bg.jpg" },
+        { src: "./imgs/fm_mask1.png" },
+        { src: "./imgs/fm_mask2.png" },
+        { src: "./imgs/fm_result1_tit1.png" },
+        { src: "./imgs/fm_result2_tit1.png" },
+        { src: "./imgs/fm1_eye1.png" },
+        { src: "./imgs/fm1_eye2.png" },
+        { src: "./imgs/fm1_eye3.png" },
+        { src: "./imgs/fm3_active1_1.png" },
+        { src: "./imgs/fm3_active1_2.png" },
+        { src: "./imgs/fm3_active2_1.png" },
+        { src: "./imgs/fm3_active2_2.png" },
+        { src: "./imgs/fm3_active4_1.png" },
+        { src: "./imgs/fm3_active4_2.png" },
         { src: "./imgs/fm3_bg.jpg" }
     ],
     init: function(_completeFun){ //开始预加载
