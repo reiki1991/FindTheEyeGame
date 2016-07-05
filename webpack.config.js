@@ -10,7 +10,7 @@ var webpackConfigs = {
   entry: { app: 'js/app.js' }, //打包后整合出来的js文件
   output: {
     path: path.join(__dirname, 'dist'),
-    publicPath: 'http://192.168.0.106:8888/', //生成后图片&js的前缀路径
+    //publicPath: 'http://192.168.0.106:8888/', //生成后图片&js的前缀路径
     filename: 'js/[name].[hash].js', //整合后的js命名规则
     chunkFilename: 'js/[chunkhash].js'
   },
@@ -40,19 +40,19 @@ var webpackConfigs = {
       allChunks: true // 所有css打包到一个文件
     }),
     new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
-        // favicon: './src/images/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
-        filename: './index.html', //生成的html存放路径，相对于path
-        template: 'html-withimg-loader?min=false!./origin/index.html', //html模板路径
-        inject: 'body', //js插入的位置，true/'head'/'body'/false
-        hash: false, //为静态资源生成hash值
-        chunks: ['app'],//需要引入的chunk，不配置就会引入所有页面的资源
-        minify: { //压缩HTML文件
-            removeComments: true, //移除HTML中的注释
-            collapseWhitespace: false, //删除空白符与换行符
-            ignoreCustomFragments:[
-                /\{\{[\s\S]*?\}\}/g  //不处理 {{}} 里面的 内容
-            ]
-        }
+      // favicon: './src/images/favicon.ico', //favicon路径，通过webpack引入同时可以生成hash值
+      filename: './index.html', //生成的html存放路径，相对于path
+      template: 'html-withimg-loader?min=false!./origin/index.html', //html模板路径
+      inject: 'body', //js插入的位置，true/'head'/'body'/false
+      hash: false, //为静态资源生成hash值
+      chunks: ['app'],//需要引入的chunk，不配置就会引入所有页面的资源
+      minify: { //压缩HTML文件
+        removeComments: true, //移除HTML中的注释
+        collapseWhitespace: false, //删除空白符与换行符
+        ignoreCustomFragments:[
+          /\{\{[\s\S]*?\}\}/g  //不处理 {{}} 里面的 内容
+        ]
+      }
     })
   ],
   module: {
@@ -132,7 +132,7 @@ if (production) { // 生产环境
     },
   }));
 } else { // 开发环境
-  // 添加 source-map
+         // 添加 source-map
   webpackConfigs.devtool = 'source-map';
   // 添加热加载
   webpackConfigs.plugins.push(new webpack.HotModuleReplacementPlugin()); // 代码热替换
