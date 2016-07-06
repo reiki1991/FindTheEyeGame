@@ -29,7 +29,7 @@ html,body { height: 100%; max-width: 640px; margin: 0 auto; overflow: hidden; }
 .fm_mask1 {background-image: url("../imgs/fm_mask1.png"); }
 .fm_mask2 {background-image: url("../imgs/fm_mask2.png"); }
 .fm_mask3 {background-color: rgba(255,255,255,.72);background-image: url("../imgs/fm_subok.png"); }
-.fm_loading span { position: absolute; width: 100%; text-align: center; top: 30%; font-size: 73px; color: #FFF;}
+.fm_loading span { position: absolute; width: 100%; text-align: center; top: 30%; font-size: 73px; color: transparent;}
 .fm_loading, .fm1 { background-position: 50% 43%; background-repeat: no-repeat; background-size: 50% auto; }
 .fm_loading, .fm1.state1 { background-color: #e7afcc; background-image: url("../imgs/fm1_eye1.png"); }
 .fm1.state2 { background-color: #FFF; background-image: url("../imgs/fm1_eye2.png"); }
@@ -95,13 +95,14 @@ html,body { height: 100%; max-width: 640px; margin: 0 auto; overflow: hidden; }
 .fm_award2_img {top: 26.5%; width: 68%; left: 17%;}
 .fm_award2 .fm_result3_data { top: 57%; }
 .fm_award2_input {background-image: url("../imgs/fm_award_input.png");margin-top: 6px; width: 42%; padding: 0 22% 0 36%;}
-.fm_award_txt2 { width: 32.5%; margin-left: 36%; }
 .fm_award2_btn1 {top: 71%; width: 42%;}
-.fm_award2 .fm_award_txt1 { top: 84%; }
 .fm_award_tit3 {width: 68%;left: 16%;top: 14%;}
 .fm_award_img1 {width: 21%;top: 25%;}
 .fm_award_btn1 {width: 50%;left: 25%;top: 33%;}
-.fm_award_txt1 {top: 78%;width: 62%;left: 18%;}
+.fm_award_txt3 {top: 77%;width: 68%;left: 16%;}
+.fm_award_txt2 { width: 32.5%; margin-left: 36%;margin-top: 5px;}
+.fm_award_txt1 {top: 83%;width: 62%;left: 18%;}
+.fm_award2 .fm_award_txt1 { top: 84%; }
 .fm_noaward .fm_award_txt1 {top: 51%;}
 /*-animation.css-*/
 .delay1.animated { -webkit-animation-delay: .8s; animation-delay: .8s; }

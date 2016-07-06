@@ -11,13 +11,14 @@ import Http from "js/http.js"
 var App = {
     loginUrl: "http://201607moco.gz.e2capp.com/wxapi.php",
     init: function () { //初始化
-        App.fm_enter(".fm1");
-         setTimeout(function () {
+        App.fm_enter(".fm_noaward");
+        /*App.fm_enter(".fm1");
+        setTimeout(function () {
             $(".fm1").fadeOut(1000);
             setTimeout(function () {
                 App.fm_enter(".fm2");
             },1000)
-         },2200);
+        },2200);*/
     },
     parseUA: function () {
         var u = navigator.userAgent;
@@ -38,11 +39,6 @@ var App = {
             taobao: u.indexOf('AliApp(TB') > -1,
         };
     },
-    getParam: function(name){
-        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-        var r = window.location.search.substr(1).match(reg);
-        if(r!=null)return  unescape(r[2]); return null;
-    },
     tip: function(_info,_style,_hideTime){ //_style的值有'tip_red'、'tip_green',默认值为'tip_default'
         var randomClass = "tip"+Math.round(Math.random()*1000000000);
         var sty = _style?_style:"tip_default"
@@ -52,8 +48,7 @@ var App = {
     },
     tiltEvent: null,
     tiltInit: function () {
-        var speed = 0, translateX=30, _count = 1, lastDir, originTime, nowDir, moveDir, minDir = (App.parseUA().android) ? 2 : 1.5, gapTime = (App.parseUA().android) ? 250 : 500;
-        var last_update = 0; //保存上次更新的时间的变量
+        var speed = 0, translateX, originDir = 0, nowDir, moveDir, minDir = 1.5;
         if(window.DeviceOrientationEvent) {
             App.tiltEvent = function(e) {
                 /*//左右倾斜使背景图移动
@@ -67,40 +62,18 @@ var App = {
                  $("#test").html(speed+"__"+translateX+"__"+tiltLR);
                  $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});*/
 
-                var curTime = new Date().getTime(); //获取当前时间
-                var sep_Time = curTime -last_update;
-                if (parseInt(sep_Time) > gapTime) { //每隔0.05s进行一次速度测试
-                    //左右旋转使背景图移动
-                    nowDir = e.alpha; //360°旋转
-                    (_count==1) && (lastDir = nowDir);
-                    if(_count>1) {
-                        moveDir = nowDir - lastDir;
-                        if(Math.abs(moveDir)>300){ //【从1,2调到458,457类的状况】
-                            moveDir = moveDir/Math.abs(moveDir) * (360 - Math.abs(moveDir));
-                        }
-                        if(Math.abs(moveDir)>minDir){
-                            //$("#test").html("moveDir: "+Math.floor(moveDir)+",now18Dir: "+Math.floor(nowDir)+",lastDir: "+Math.floor(lastDir));
-                            if(App.parseUA().android){
-                                var _dir = Math.abs(moveDir);
-                                if(_dir<13){
-                                    translateX -= moveDir/2;
-                                }else if(_dir<26){
-                                    translateX -= moveDir/3;
-                                }else if(_dir<40){
-                                    translateX -= moveDir/4;
-                                }else{
-                                    translateX -= moveDir/5;
-                                }
-                            }else{
-                                translateX -= moveDir/3;
-                            }
-                            (translateX<0) && (translateX = 0);
-                            (translateX>70) && (translateX = 70);
-                            $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});
-                            lastDir = nowDir;
-                        }
-                    }
-                    _count++;
+                //左右旋转使背景图移动
+                nowDir = e.alpha; //360°旋转
+                moveDir = nowDir - originDir;
+                (nowDir>(360/2)) ? (moveDir = 360 - nowDir) : (moveDir = -nowDir);
+                (App.parseUA().android) && (minDir = 1);
+                if(Math.abs(moveDir)>minDir){
+                    $("#test").html("_nowDir:_"+nowDir+"_translateX:_"+translateX);
+                    translateX = 30;
+                    translateX += moveDir/2;
+                    (translateX<0) && (translateX = 0);
+                    (translateX>70) && (translateX = 70);
+                    $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});
                 }
             }
             window.addEventListener('deviceorientation', App.tiltEvent, false);
@@ -176,7 +149,7 @@ var App = {
     }
 }
 $(document).ready(function () {
-    window.isDebugger = false;
+    window.isDebugger = true;
     window.log = function (m) { (document.ontouchstart!==null) ?  (isDebugger &&　alert(m)) : (console.log(m)); }
     var body_w, body_h;
     var _triggerEvent = (document.ontouchstart!==null) ?  'click' : 'touchstart';
@@ -190,8 +163,6 @@ $(document).ready(function () {
             Http.getuserinfo(function (_data) { //获取登陆用户自己的用户资料
                 _data && _data.Tel && (is_mark = true);
             });
-            //是否分享回流
-            (App.getParam("uid")) && (Http.actionTotal("shareback"));
         }else if(_data=="-1"){ //未登录
             window.location.href = App.loginUrl;
         }
@@ -214,7 +185,6 @@ $(document).ready(function () {
     $("body").on(_triggerEvent,".fm2_btn1",function () {
         App.fm_enter(".fm3");
         App.fm_enter(".fm_mask1");
-        Http.actionTotal("indexstart");
     });
     //fm_result2_btn1点击事件【再找一次】&& fm_award_btn1点击事件【Replay】
     $("body").on(_triggerEvent,".fm_result2_btn1,.fm_award_btn1",function () {
@@ -226,7 +196,6 @@ $(document).ready(function () {
     //fm_result1_btn1点击事件【抽大奖】
     $("body").on(_triggerEvent,".fm_result1_btn1",function () {
         is_mark ? App.lottery_result() : App.fm_enter(".fm_result3");
-        Http.actionTotal("goprize");
     });
     //fm_result3_btn1点击事件【提交抽奖信息】
     var phone_regex = new RegExp("1[0-9]{10}");
@@ -260,9 +229,9 @@ $(document).ready(function () {
         })
     });
     /*//fm_award_btn1点击事件【Replay】
-     $("body").on(_triggerEvent,".fm_award_btn1",function () {
-     window.location.reload();
-     });*/
+    $("body").on(_triggerEvent,".fm_award_btn1",function () {
+        window.location.reload();
+    });*/
     //resize
     var isResizing = false; //避免频繁触发resize操作
     $(window).on("load resize",function() {
@@ -274,10 +243,10 @@ $(document).ready(function () {
         //重置fm3_box的宽度
         $(".fm3_box").css("width",scale_fm3_bg*body_h+"px");
         //旋屏提示
-        /*if(body_w>body_h){
+        if(body_w>body_h){
             ($(".prohibit_rotate").css("display")=="none") && $(".prohibit_rotate").show();
         }else{
             ($(".prohibit_rotate").css("display")=="block") && $(".prohibit_rotate").hide();
-        }*/
+        }
     });
 });

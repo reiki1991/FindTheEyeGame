@@ -28,6 +28,18 @@ var Http = {
             }
         });
     },
+    actionTotal: function(code, success, error){ //会员统计数据
+        var data = {
+            "action": "total",
+            "code": code
+        }
+        this.request("", data, function (_data) {
+            if(_data==2){
+                console.log("请输入正确的code");
+            }
+            success &&　success(_data);
+        }, error);
+    },
     checkLogin: function(success, error){ //判断是否登陆
         var data = {
             "action": "checkLogin"
