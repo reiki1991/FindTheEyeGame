@@ -39,7 +39,8 @@ else
 }
 
 ?>
-<!DOCTYPE html>
+
+
 
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 
@@ -119,6 +120,3 @@ else
     });
 </script>
 <script type="text/javascript" src="js/share.js"></script>
-
-</body>
-</html>

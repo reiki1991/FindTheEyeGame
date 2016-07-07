@@ -25,11 +25,11 @@ var Preload = {
     ],
     init: function(_completeFun){ //开始预加载
         var _preload = new createjs.LoadQueue(true);
-        var _progressObj = $(".fm_loading").children("span");
+        var _progressObj = $(".loading_bar").children("span");
         //已加载完毕进度
         _preload.on("progress", function() {
             //console.log("已加载 " + (_preload.progress*100|0) + " %");
-            _progressObj.html((_preload.progress*100|0) + " %");
+            _progressObj.css("width",(_preload.progress*100|0) + "%");
         });
         //全度资源加载完毕
         _preload.on("complete", function() {

@@ -29,7 +29,8 @@ html,body { height: 100%; max-width: 640px; margin: 0 auto; overflow: hidden; }
 .fm_mask1 {background-image: url("../imgs/fm_mask1.png"); }
 .fm_mask2 {background-image: url("../imgs/fm_mask2.png"); }
 .fm_mask3 {background-color: rgba(255,255,255,.72);background-image: url("../imgs/fm_subok.png"); }
-.fm_loading span { position: absolute; width: 100%; text-align: center; top: 30%; font-size: 73px; color: transparent;}
+.loading_bar { position: absolute; top: -7px; width: 100%; height: 7px;}
+.loading_bar span { display: inline-block; height: 100%; background-color: #FFF; font-size: 0; line-height: 0;}
 .fm_loading, .fm1 { background-position: 50% 43%; background-repeat: no-repeat; background-size: 50% auto; }
 .fm_loading, .fm1.state1 { background-color: #e7afcc; background-image: url("../imgs/fm1_eye1.png"); }
 .fm1.state2 { background-color: #FFF; background-image: url("../imgs/fm1_eye2.png"); }

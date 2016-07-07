@@ -10,7 +10,7 @@ var webpackConfigs = {
   entry: { app: 'js/app.js' }, //打包后整合出来的js文件
   output: {
     path: path.join(__dirname, 'dist'),
-    //publicPath: 'http://192.168.0.106:8888/', //生成后图片&js的前缀路径
+    publicPath: 'http://cdn.201607moco.gz.e2capp.com/', //生成后图片&js的前缀路径
     filename: 'js/[name].[hash].js', //整合后的js命名规则
     chunkFilename: 'js/[chunkhash].js'
   },

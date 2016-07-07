@@ -11,13 +11,14 @@ import Http from "js/http.js"
 var App = {
     loginUrl: "http://201607moco.gz.e2capp.com/wxapi.php",
     init: function () { //初始化
-        App.fm_enter(".fm1");
+        App.fm_enter(".fm3");
+        /*App.fm_enter(".fm1");
          setTimeout(function () {
             $(".fm1").fadeOut(1000);
             setTimeout(function () {
                 App.fm_enter(".fm2");
             },1000)
-         },2200);
+         },2200);*/
     },
     parseUA: function () {
         var u = navigator.userAgent;
@@ -67,6 +68,18 @@ var App = {
                  $("#test").html(speed+"__"+translateX+"__"+tiltLR);
                  $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});*/
 
+                //左右旋转使背景图移动【初始方法】
+                /*nowDir = e.alpha; //360°旋转
+                (nowDir>(360/2)) ? (moveDir = 360 - nowDir) : (moveDir = -nowDir);
+                if(Math.abs(moveDir)>minDir){
+                    $("#test").html("_nowDir:_"+nowDir+"_translateX:_"+translateX);
+                    translateX = 30;
+                    translateX += moveDir/2;
+                    (translateX<0) && (translateX = 0);
+                    (translateX>70) && (translateX = 70);
+                    $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});
+                }*/
+
                 var curTime = new Date().getTime(); //获取当前时间
                 var sep_Time = curTime -last_update;
                 if (parseInt(sep_Time) > gapTime) { //每隔0.05s进行一次速度测试
@@ -79,7 +92,7 @@ var App = {
                             moveDir = moveDir/Math.abs(moveDir) * (360 - Math.abs(moveDir));
                         }
                         if(Math.abs(moveDir)>minDir){
-                            //$("#test").html("moveDir: "+Math.floor(moveDir)+",now18Dir: "+Math.floor(nowDir)+",lastDir: "+Math.floor(lastDir));
+                            $("#test").html("moveDir: "+Math.floor(moveDir)+",now18Dir: "+Math.floor(nowDir)+",lastDir: "+Math.floor(lastDir));
                             if(App.parseUA().android){
                                 var _dir = Math.abs(moveDir);
                                 if(_dir<13){
@@ -146,7 +159,7 @@ var App = {
         }
         //频道fm_result
         (_fm.indexOf("fm_result") > 0) && setTimeout(function (){
-            //App.blink(".fm_baba", 2, null, 500); //执行眨眼操作
+            //App.blink(".fm_baba", 2, null, 450); //执行眨眼操作
             $(_fm).find(".fm_result_star").addClass("fadeOut"); //星星闪烁操作
         },1200);
     },
@@ -176,7 +189,7 @@ var App = {
     }
 }
 $(document).ready(function () {
-    window.isDebugger = false;
+    window.isDebugger = true;
     window.log = function (m) { (document.ontouchstart!==null) ?  (isDebugger &&　alert(m)) : (console.log(m)); }
     var body_w, body_h;
     var _triggerEvent = (document.ontouchstart!==null) ?  'click' : 'touchstart';
@@ -259,10 +272,6 @@ $(document).ready(function () {
             }
         })
     });
-    /*//fm_award_btn1点击事件【Replay】
-     $("body").on(_triggerEvent,".fm_award_btn1",function () {
-     window.location.reload();
-     });*/
     //resize
     var isResizing = false; //避免频繁触发resize操作
     $(window).on("load resize",function() {
