@@ -11,14 +11,9 @@ import Http from "js/http.js"
 var App = {
     loginUrl: "http://201607moco.gz.e2capp.com/wxapi.php",
     init: function () { //初始化
-        /*if(isDebugger){
-            App.tip(121321);
-            App.fm_enter(".fm3");
-            return;
-        }*/
-        setTimeout(function () {
+        /*setTimeout(function () {
             App.fm_enter(".fm2");
-        },1000);
+        },1000);*/
     },
     parseUA: function () {
         var u = navigator.userAgent;
@@ -53,7 +48,8 @@ var App = {
     },
     tiltEvent: null,
     tiltInit: function () {
-        var speed = 0, translateX=30, _count = 1, lastDir, originTime, nowDir, moveDir, minDir = (App.parseUA().android) ? 2 : 1.5, gapTime = (App.parseUA().android) ? 250 : 500;
+        var x1 = 0, x2 = 0, x3 = 0, x4 = 0, x5 = 0,x6 = 0,_count = 1;
+        var speed = 0, translateX=30, lastDir, originTime, nowDir, moveDir, minDir = (App.parseUA().android) ? 2 : 1.5, gapTime = (App.parseUA().android) ? 250 : 500;
         var last_update = 0; //保存上次更新的时间的变量
         if(window.DeviceOrientationEvent) {
             App.tiltEvent = function(e) {
@@ -80,41 +76,28 @@ var App = {
                     $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});
                 }*/
 
-                var curTime = new Date().getTime(); //获取当前时间
-                var sep_Time = curTime -last_update;
-                if (parseInt(sep_Time) > gapTime) { //每隔0.05s进行一次速度测试
-                    //左右旋转使背景图移动
-                    nowDir = e.alpha; //360°旋转
-                    (_count==1) && (lastDir = nowDir);
-                    if(_count>1) {
-                        moveDir = nowDir - lastDir;
-                        if(Math.abs(moveDir)>300){ //【从1,2调到458,457类的状况】
-                            moveDir = moveDir/Math.abs(moveDir) * (360 - Math.abs(moveDir));
-                        }
-                        if(Math.abs(moveDir)>minDir){
-                            //isDebugger && $("#test").html("moveDir: "+Math.floor(moveDir)+",now18Dir: "+Math.floor(nowDir)+",lastDir: "+Math.floor(lastDir));
-                            if(App.parseUA().android){
-                                var _dir = Math.abs(moveDir);
-                                if(_dir<13){
-                                    translateX -= moveDir/2;
-                                }else if(_dir<26){
-                                    translateX -= moveDir/3;
-                                }else if(_dir<40){
-                                    translateX -= moveDir/4;
-                                }else{
-                                    translateX -= moveDir/5;
-                                }
-                            }else{
-                                translateX -= moveDir/3;
-                            }
-                            (translateX<0) && (translateX = 0);
-                            (translateX>70) && (translateX = 70);
-                            $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});
-                            lastDir = nowDir;
-                        }
-                    }
-                    _count++;
+                (_count==1) && (x1=event.alpha);
+                (_count==2) && (x2=event.alpha);
+                (_count==3) && (x3=event.alpha);
+                (_count==4) && (x4=event.alpha);
+                (_count==5) && (x5=event.alpha);
+                if(_count==6){
+                    x6 = event.alpha;
+                    moveDir = (x4+x5+x6)/3 - (x1+x2+x3)/3;
+                    //$("#test1").html("x1:==== "+Math.floor(x1)+"===,x2:==== "+Math.floor(x2)+"===,x3:==== "+Math.floor(x3)+"====,x4:==="+Math.floor(x4)+"===,x5: ====="+Math.floor(x5)+",x6: "+Math.floor(x6));
+                    //$("#test1").html('Orientation - _movespace: ' + Math.floor(moveDir));
+                    //===============
+                    (Math.abs(moveDir)>20)&& (moveDir = moveDir/Math.abs(moveDir) * 3);
+                    translateX -= moveDir;
+                    (translateX<0) && (translateX = 0);
+                    (translateX>70) && (translateX = 70);
+                    $("#test2").html('moveDir: ' + Math.floor(moveDir)+ '，，translateX: ' + Math.floor(translateX));
+                    $(".fm3_box").css({ '-webkit-transform':"translateX(-"+translateX+"%)",'transform':"translateX(-"+translateX+"%)"});
+
+                    //===============
+                    _count=1;
                 }
+                _count++;
             }
             window.addEventListener('deviceorientation', App.tiltEvent, false);
         } else {
@@ -150,7 +133,7 @@ var App = {
         //清除上一屏的眨眼操作
         App.timer_blink &&(_fm.indexOf("fm_mask") < 0) && clearInterval(App.timer_blink);
         //频道1执行眨眼操作
-        _fm == ".fm1" && App.blink(".fm1", 3);
+        _fm == ".fm1" && App.blink(".fm1", 3, 2);
         //频道3执行眨眼操作
         if(_fm == ".fm3"){
             App.blink(".fm3_active3", 2);
@@ -189,17 +172,17 @@ var App = {
     }
 }
 $(document).ready(function () {
-    window.isDebugger = false;
+    window.isDebugger = true;
     window.log = function (m) { (document.ontouchstart!==null) ?  (isDebugger &&　alert(m)) : (console.log(m)); }
     var body_w, body_h;
     var _triggerEvent = (document.ontouchstart!==null) ?  'click' : 'touchstart';
     var scale_fm3_bg = 2551/1206;
     var templ_fm3 = $(".fm3").html();
     var is_mark = false; //是否登记过信息
-    //isDebugger && Preload.init(App.fm_enter(".fm1"),App.init);
+    isDebugger && Preload.init(App.fm_enter(".fm3"),App.init);
     Http.checkLogin(function (_data) { //检测是否登陆[-1为未登录，1为登陆]
         if(_data=="1"){ //已登陆
-            Preload.init(App.fm_enter(".fm1"),App.init); //init事件
+            Preload.init(App.init); //init事件
             Http.getuserinfo(function (_data) { //获取登陆用户自己的用户资料
                 _data && _data.Tel && (is_mark = true);
             });
@@ -211,12 +194,7 @@ $(document).ready(function () {
     });
     //fm3_active点击事件【眼睛被点击】
     $("body").on(_triggerEvent,".fm3_active",function (e) {
-        if(e.target.nodeName=="IMG"){
-            $(this).attr("src",$(this).data("open")).removeClass("fm3_active");
-            $(this).next(".state1").show();
-            return;
-        }
-        $(this).remove();
+        (e.target.nodeName=="IMG") ? $(this).attr("src",$(this).data("open")).removeClass("fm3_active") : $(this).remove(); //替换打开图片或移除眼睛
         //停止倒计时&加分操作
         clearInterval(App.timer_countdown);
         var _score = $(".fm3_score").html()-0+1;
@@ -227,19 +205,19 @@ $(document).ready(function () {
             App.fm_enter(".fm_mask2");
             setTimeout(function () {
                 if($(".fm_mask2").hasClass("cur")){
-                    $(".fm_mask2").removeClass("cur");
-                    App.countdown(".fm3_stopwatch",parseInt($(".fm3_stopwatch").html()),App.gameover);
+                    $(".fm_mask2").fadeOut();
+                    setTimeout(function () {
+                        $(".fm_mask2").removeClass("cur");
+                        $(".fm_mask2")[0].style = "";
+                        App.countdown(".fm3_stopwatch",parseInt($(".fm3_stopwatch").html()),App.gameover);
+                    },600)
                 }
-            },700);
+            },1000);
         }
     });
     //fm_mask1&&fm_mask2点击事件【遮罩层点击】
-    $("body").on(_triggerEvent,".fm_mask2",function () {
+    $("body").on(_triggerEvent,".fm_mask1,.fm_mask2",function () {
         $(this).removeClass("cur");
-        App.countdown(".fm3_stopwatch",parseInt($(".fm3_stopwatch").html()),App.gameover);
-    });
-    $("body").on(_triggerEvent,".fm_mask1",function () {
-        $(this).remove();
         App.countdown(".fm3_stopwatch",parseInt($(".fm3_stopwatch").html()),App.gameover);
     });
     //fm2_btn1点击事件【开始游戏】

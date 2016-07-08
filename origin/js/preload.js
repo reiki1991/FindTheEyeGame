@@ -23,7 +23,8 @@ var Preload = {
         { src: "./imgs/fm_result2_tit1.png" },
         { src: "./imgs/fm_subok.png" }
     ],
-    init: function(_completeFun){ //开始预加载
+    init: function(_beginFun, _completeFun){ //开始预加载
+        _beginFun && _beginFun();
         var _preload = new createjs.LoadQueue(true);
         var _progressObj = $(".loading_bar").children("span");
         //已加载完毕进度
@@ -34,7 +35,7 @@ var Preload = {
         //全度资源加载完毕
         _preload.on("complete", function() {
             //console.log("已加载完毕全部资源");
-            $(".fm_loading").fadeOut(2000, function(){$(".fm_loading").remove()});
+            $(".fm1").fadeOut(2000, function(){$(".fm1").remove()});
             _completeFun && _completeFun();
         });
         _preload.loadManifest(Preload.manifest);

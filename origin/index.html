@@ -13,11 +13,11 @@
 </head>
 <body>
 <div class="fm_box">
-    <div class="fm fm_loading"><div class="loading_bar"><span></span></div></div><!--预加载层-->
-    <div class="fm fm_mask1"></div><!--游戏规则遮罩层-->
+    <!--<div class="fm fm_loading"><div class="loading_bar"><span></span></div></div>&lt;!&ndash;预加载层&ndash;&gt;-->
+    <div class="fm fm_mask1"><img class="fm_mask1_phone moveLR" src="./imgs/fm_mask1_phone.png" alt="粉色巴巴爸爸"></div><!--游戏规则遮罩层-->
     <div class="fm fm_mask2"></div><!--加分遮罩层-->
     <div class="fm fm_mask3"></div><!--提交成功遮罩层-->
-    <div class="fm fm1 state1" data-state="state1"></div><!--初始化眨眼-->
+    <div class="fm fm1 state1" data-state="state1"><div class="loading_bar"><span></span></div></div><!--初始化眨眼-->
     <!--Just having fun-->
     <div class="fm fm2">
         <img class="fm2_txt1 animated fadeIn delay1" src="./imgs/fm2_txt1.png" alt="粉色巴巴爸爸">
@@ -32,9 +32,12 @@
         <div class="fm3_box rel">
             <img class="fm3_bg" src="./imgs/fm3_bg.jpg" alt="粉色巴巴爸爸">
             <img class="fm3_active1 fm3_active abs" src="./imgs/fm3_active1_1.png" data-open="./imgs/fm3_active1_2.png" alt="粉色巴巴爸爸">
+            <div class="fm3_active1_3 fm3_active abs state1" data-state="state1"></div>
             <img class="fm3_active2 fm3_active abs" src="./imgs/fm3_active2_1.png" data-open="./imgs/fm3_active2_2.png" alt="粉色巴巴爸爸">
+            <div class="fm3_active2_3 fm3_active abs state1" data-state="state1"></div>
             <div class="fm3_active3 fm3_active abs state1" data-state="state1"></div>
             <img class="fm3_active4 fm3_active abs" src="./imgs/fm3_active4_1.png" data-open="./imgs/fm3_active4_2.png" alt="粉色巴巴爸爸">
+            <div class="fm3_active4_3 fm3_active abs state1" data-state="state1"></div>
             <div class="fm3_active5 fm3_active abs state1" data-state="state1"></div>
         </div>
     </div>
@@ -58,7 +61,7 @@
         <img class="fm_result_star4 fm_result_star abs animated infinite delay3" src="./imgs/fm_result_star4.png" alt="粉色巴巴爸爸">
     </div>
     <!--填写抽奖信息-->
-    <div class="fm fm_result3">
+    <div class="fm fm_result3" style="min-height: 500px;">
         <div class="fm_baba abs state1" data-state="state1"></div>
         <img class="fm_result3_tit1 abs animated fadeIn" src="./imgs/fm_result3_tit1.png" alt="粉色巴巴爸爸">
         <form class="fm_result3_data">
@@ -103,11 +106,88 @@
         <img class="fm_award_txt1 abs" src="./imgs/fm_award_txt1.png" alt="粉色巴巴兔兔">
     </div>
 </div>
-<div class="tip_box tip_default tip111" id="test">倾斜检测</div>
+<!--<div class="tip_box tip_default tip111" id="test1">倾斜检测</div>-->
+<!--<div class="tip_box tip_default tip111" id="test2" style="margin-top: 60px;">倾斜检测</div>-->
 <div class="prohibit_rotate"></div>
 <!--<script src="js/preloadjs.min.js"></script>
 <script src="js/zepto.min.js"></script>
 <script src="js/preload.js"></script>
 <script src="js/app.js"></script>-->
 </body>
+<script type="text/javascript">
+    //封装ajax
+    function ajaxPackage2(url,jsonData,callback){
+        url = url||"wxtemp.php";
+        $.ajax({
+            url:url,
+            type:"post",
+            data:jsonData,
+            success:callback
+        });
+    }
+
+    var wxurl = window.location.href;
+    //判断登陆
+    ajaxPackage2("",{wxurl:wxurl},function(data){
+
+        data = eval("("+data+")");
+
+        var appId=data.appId;
+        var timestamp=data.timestamp;
+        var nonceStr=data.nonceStr;
+        var signature=data.signature;
+
+
+        wx.config({
+            //debug: true,
+            appId: appId,
+            timestamp: timestamp,
+            nonceStr: nonceStr,
+            signature:signature,
+            jsApiList: [
+                // 所有要调用�?API 都要加到这个列表�?
+                'checkJsApi',
+                'onMenuShareTimeline',
+                'onMenuShareAppMessage',
+                'onMenuShareQQ',
+                'onMenuShareWeibo',
+                'hideMenuItems',
+                'showMenuItems',
+                'hideAllNonBaseMenuItem',
+                'showAllNonBaseMenuItem',
+                'translateVoice',
+                'playMusic',
+                'startRecord',
+                'stopRecord',
+                'onRecordEnd',
+                'playVoice',
+                'pauseVoice',
+                'stopVoice',
+                'uploadVoice',
+                'downloadVoice',
+                'chooseImage',
+                'previewImage',
+                'uploadImage',
+                'downloadImage',
+                'getNetworkType',
+                'openLocation',
+                'getLocation',
+                'hideOptionMenu',
+                'showOptionMenu',
+                'closeWindow',
+                'scanQRCode',
+                'chooseWXPay',
+                'getLatestAddress',
+                'editAddress',
+                'openProductSpecificView',
+                'addCard',
+                'chooseCard'
+            ]
+        });
+
+
+
+    });
+</script>
+<script type="text/javascript" src="js/share.js"></script>
 </html>
